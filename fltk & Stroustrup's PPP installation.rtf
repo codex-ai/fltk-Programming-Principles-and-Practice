@@ -1,0 +1,295 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Consolas;}{\f2\fnil\fcharset0 Consolas;}}
+{\colortbl ;\red0\green0\blue255;\red128\green128\blue128;\red0\green0\blue0;\red163\green21\blue21;\red43\green145\blue175;\red47\green79\blue79;\red111\green0\blue138;\red0\green128\blue0;\red0\green128\blue128;}
+{\*\generator Riched20 10.0.18362}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 How I installed fltk(aka full-tick) in Microsoft Visual Studio 2019 on Windows 10 pro; And getting the " A display model" from programming Principles and Practices(second edition) up and running. This was done on the current version of Windows 10 pro. Using:\par
+Microsoft Visual Studio code 2019 community edition (version 16.8.4).\par
+Winsdk10.0.18362\par
+fltk-1.3.5\par
+PPP2(tar ball) from stroustrup.com\par
+This is a step by step discription of how I installed fltk1.3.5 in Visual Studio on windows 10.\par
+The first set of instructions is for fltk only. The second set is for Programming Principles and Practices second addition by Bjarne Stroustrup. It is amost identical with exception of debugging and linking the header and source files and creating his first "Hello World Window" from his source files.\par
+For Programming Principles and Practices skip step 14 (generating the fltk "Hello World!" window). The instruction's pick back up for PPP below. Every thing is the same with the exception of debuging the PPP header and source file's. and generating the first window.\par
+1.) Install Microsoft Visual Studio community edition (google it). Choose Desktop Developement with C++ from the Workloads  options menu. It should install every thing you need.\par
+2.)Download and install 7zip file manager(it's free and easy to use). Or any other you prefer. \par
+3.)Download fltk1.3.5 from fltk.org(google it).\par
+4.)create a folder some were, I created a folder called dev in  users/'my directory':\par
+example C:\\users\\'name'\\(create a new folder here called)dev or something.\par
+5.)go to were you downloaded the fltk tar file (Probably in the downloads folder this is the defualt location on windows).\par
+6.)select the tar or zip file and right click and choose from the menu open with 7zip file manager. 7zip will give you the option of were to unzip and install the file. select browse and navigate to your newly created dev/ folder and select extract here. There may be another tar file extracted to your dev folder. If so select the newly created tar file and right click and select open with 7zip and select extract here. You should now have a fltk-1.3.5 file.\par
+7.)Open this file (fltk-1.3.5) and navigate to IDE\\VisualC2010\\fltk.sln select it, right clic and choose open with Microsoft Visual Studio 2019. Visual Studio will load  all of the project files in this directory, you will see a window asking if you want to update the tool chain(yes) . The ribbon menu should indicate that you are in debug win32 as this should be the defualt. When its finished updating the tool chain, in the solutions explorer window there is a list of projects, the project Demo should already be highlighted if not select it and select from the ribbon menu build/build solution or press f5.\par
+ there are a lot of projects that wil be built and a lot of cmd windows will pop up during the build. Just let it finish. When its done there will be an fltk\\test\\ demod.exe in the ...\\fltk-1.3.5\\test folder ,  that you can use to explore fltk with. You can explore these at this time or come back to them later, to  finish the install first:\par
+8.)Once Visual studio is done and all files are compiled. select save all from the file menu on the ribbon tab. and close  Visual Studio code 2019. \par
+9.)open file explorer in windows 10 and navigate to were you put fltk-1.3.5, for me that is \par
+c:/users/'myname'/dev/fltk-1.3.5.\par
+open the file and navigate to the lib folder and select each lib file, one at a time, or for myself it was simpler to copy all the files by highlighting or using select all and choosing copy. \par
+then navigate back to c:\\Program (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.28.29333(this may be slightly different depending on the version)\\lib\\x86 do not open the x86\\ folder when you get here just select(so it's highlighted) it and right clic and select paste. The dialog box will ask for permision check the box for all files and click yes. Once you have copied the files (at this point should still only have debug libraries)open the lib\\86 folder scroll to and delete the fltk.bcs files. they don't actually belong there. Also the read me file if you happened to copy it as well. Leave all of the fltk debug files there are 7 total. and be carefull not to delete any thing else. We are only interested in the fltk debug files at this time. You will recognize them becuase they all start with fltk and end with d.lib.\par
+10.)now open fltk-1.3.5 again and navigate to and copy the FL folder(don't open it just select and copy the whole folder). Navigate back to your previous location at ...\\MSVC\\14.28.29333\\(this time locate and highlight the include folder right clic and select paste, select do this for all from the permissions box and it will copy FL to include. Repeat the process for the GL folder in fltk-1.3.5 to visualstudio include folder.\par
+11.) Locate the fluid folder in fltk-1.3.5 open it and select and copy fluid .exe or you may only have fluidd for now and navigate back to the same \\MSVC\\14.28.29333\\(select the bin folder and paste fluidd and or flluid.exe into the bin folder.\par
+restart Microsoft Visual Studio Code 2019.\par
+12.)When VScode reopens select create a new  project- and from the menu that opens- select empty project. Give it a name, I named mine fltk32. select next and a empty project page will open. Note: if your just setting up Programming Principles and Practices  you can name the project win32 that's whats asked of you to do in the book. Really the book ask you to create a empty win32 project. I checked the box to place the solution in the same directory (optional).\par
+13.) on the ribbon tab select Project and navigate to properties at the bottom of the drop down menu. Open the proprties pages and select linker/input. On the input menu on the line: Additional Dependencies select edit. Enter the following lib's, seperating each one by a simicolon.\par
+comctl32.lib;wsock32.lib;fltkd.lib;fltkformsd.lib;fltkgld.lib;fltkimagesd.lib;fltkjpegd.lib;fltkpngd.lib;user32.lib;gdi32.lib;advapi32.lib;shell32.lib;ole32.lib;\par
+since this is for installing fltk in VS I am including all 7 debug libraries. The Windows lib are nesssacary in order to create a windows executable window that will launch the fltk window.\par
+In Windows a window has to be registered and given a handle before being handed over to the system.  This will link the fltk and windows lib.\par
+new to visual studio is avoiding conflicts between libraries of the debug and release types. So initialy I got a warning about potential conflicts all thow just a warning it seemed prudent to avoid conflicts so the next step was added after cunsulting the information on the windows linker warnings page of the microsoft documents pages  you can find more information at. {{\field{\*\fldinst{HYPERLINK https://docs.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098?view=msvc-160 }}{\fldrslt{https://docs.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098?view=msvc-160\ul0\cf0}}}}\f0\fs22 .\par
+14.) In the same linker\\input page from the project properties tab select Ignore Specific Defualt Libraries and select edit. In the Edit box enter.\par
+/NODEFUALTLIB:[libcd.lib,libcmt.lib,msvcrt.lib,libcmtd.lib]\par
+select apply. then ok.\par
+These are the release lib and we are using debug so when you do eventually do a release version you set up the same procecdure but instead ignore the debug libraries and change:  Additional Dependencies to the release  versions of the fltk lib. When you build a release version.\par
+Note: There is no compiler tab yet in the Project properties settings  because ther is nothing to compile yet. After adding the source files before you compile come back to this next step and check to see that it's sep up correctly.\par
+15.) From the same Project Properties menu select c/c++ linker and select code generation and from that menu select  Multi-threaded Debug DLL (/MDd) Again for debug mode you may have to change this for a release version as well. The line: runtime checks should be set to Default.\par
+16.)At this point the compiler and linker should be set up right. Now let's create a source file. If your working on programming principles and practice's skip this next step.\par
+The file fltk-1.3.5 does not contain a "Hello World!" window which is the custom. However the fltk user manual does wich you can download from fltk.org if you want to learn more about fltk in general. I have included that file to use as a first source file for fltk.\par
+In the Solution Explorer window select from the drop down menu Source Files and right clic and select add new item. From the pop up menu select visual c++ /C++ file(.cpp\lang1033 )  in the editor box copy and paste the following code.\par
+\cf2\f1\fs19 #include\cf3  \cf4 <FL/Fl_Window.H>\cf3\par
+\cf2 #include\cf3  \cf4 <FL/Fl_Box.H>\cf3\par
+\cf1 int\cf3  main(\cf1 int\cf3  \cf2 argc\cf3 , \cf1 char\cf3 ** \cf2 argv\cf3 ) \{\par
+\tab\cf5 Fl_Window\cf3 * window = \cf1 new\cf3  \cf5 Fl_Window\cf3 (340, 180);\par
+\tab\cf5 Fl_Box\cf3 * box = \cf1 new\cf3  \cf5 Fl_Box\cf3 (20, 40, 300, 100, \cf4 "Hello, World!"\cf3 );\par
+\tab box->box(\cf6 FL_UP_BOX\cf3 );\par
+\tab box->labelfont(FL_BOLD + FL_ITALIC);\par
+\tab box->labelsize(36);\par
+\tab box->labeltype(\cf7 FL_SHADOW_LABEL\cf3 );\par
+\tab window->end();\par
+\tab window->show(\cf2 argc\cf3 , \cf2 argv\cf3 );\par
+\tab\cf1 return\cf3  \cf5 Fl\cf3 ::run();\par
+\}\par
+\f2 from the Top of the editor window or the Properties Explorer window select win32 and from the ribbon menu select build or press f5.\par
+you should see a succesfull build in the output window. \par
+from the ribbon menu choose Tools/Command line: which ever you prefer cmd shell or powershell\par
+> cd debug (The executable file will be located in the debug folder).\par
+enter win32.exe you should get the fltk "Hello World!" window.\par
+congradulations if all went as it should you have linked fltk and windows.\par
+\par
+Programming Principles and Practices (second edition)\par
+if you have not already done the first 10 steps of the previous instructions do so now.\par
+
+\pard\sa200\sl276\slmult1\qc Instruction's for Programming Principles and Practice's(2 edition):\par
+
+\pard\sa200\sl276\slmult1\cf0\f0\fs22\lang9 17.) You will need the header and cpp source files from Bjarn Stroustrup's web page here is a link to the  support code for PPP2(tar ball).\par
+{{\field{\*\fldinst{HYPERLINK https://www.stroustrup.com/programming_support.html }}{\fldrslt{https://www.stroustrup.com/programming_support.html\ul0\cf0}}}}\f0\fs22\par
+Note that it say's the code has been recovered from his previous website and may contain bugs. And it does. It was no easy task finding fixes searching the verious sites like stack exchange gethub, you tube, Windows, and others for pehaps original files that were used before the recovery and find fixes. And more than once thought about skipping these chapters all together. But through a combination of a lot of incomplete answers I came up with this solutuion which is also incomplete but it does get them installed and working thow there will be some warnings a lot of witch can be ignored and some are due to the quirkyness of visual studio code's need for fully qualified names in some area's. One of the main themes of this book is to place an emphasis on debugging so it will be up to you the learner to handle what bugs may still exist.\par
+18.) Download the PPP2(tar ball) and create a folder for it some were. Use 7zip to extract the files(or the extraction tool that you use). It may be better to edit the file's and correct the bugs before using it in visual studio. Navigate to the PP2 folder/file  and open in a text editor(note pad will do but it helps to have line numbers)or which ever (editor) you use. \par
+It's not necassary to read through this section. It only serves to explain the reasoning behind this solution. You may skip to the next step. I included this in-case someone would like to point out  a more correct solution.\par
+In chapter 12 of PPP(second edition) there is a graphic that shows the way the file's are linked:\par
+we have:\par
+int main()->"Graph.h",Simple_window.h"\par
+"Graph.h"->"Point.h","fltk.h"\par
+"fltk.h"<-fltk code(The arrow i believe should point the other way, printing error ?)\par
+"Simple_Window.h"->"Gui.h","Window.h"\par
+"Gui.h"->"Window.h","fltk.h" \par
+"Window.h"->"fltk.h","Point.h"\par
+"fltk.h"<-fltk code(I believe the header calls the fltk code and all needed fltk source files)\par
+"Gui.cpp"->"Gui.h"\par
+"Graph.cpp"->"Graph.h"\par
+"window.cpp"->"Window.h"\par
+The code from the PPP2(tar ball) stack look's like:\par
+main()->"Graph.h","Simple_window.h"\par
+"Graph.h"->"Point.h,"fltk.h",<vector>\par
+"fltk.h"->"fltk code\par
+"Simple_window.h"->Gui.h\par
+Gui.h->"Point.h","fltk.h","Window.h","Graph.h"\par
+"Window.h"->"fltk.h","std_lib_facilities.h",Point.h\par
+"window.cpp->"Window.h","Graph.h","Gui.h"\par
+"Gui.cpp->"Gui.h","std_lib_facilities.h",<sstream>\par
+"Graph.cpp"->"Graph.h",<map>\par
+This clearly is not what is described in chapter. It's more like a circle then a stack. There are source and header files out of place and creating conflicts with definitions as well as some that will not find the definition or declaration they need. In the chapter(12) it gives the reader the choice of using "std_lib_facilities" or dealing directly with the standard Libraries. However you will notice in some source files both methods are used(creating possable conflicts). "std_lib_facilities.h is a good utility that includes all of these libraries already(with the exception of <map>) so why not use it. I have chosen to do so here.  \par
+\par
+So after a lot of work , I managed to come up with a working model that look's like this:\par
+int main()->"Graph.h","Simple_window.h"\par
+"Graph.h"->"std_lib_facilities.h",Point.h","fltk.h"\par
+"Simple_window.h"->"Gui.h"\par
+"Gui.h"->"Window.h",Graph.h"\par
+"Window.h"->"std_lib_facilities.h","Point.h","fltk.h"\par
+"std_lib_facilities.h"->stdlib <headers>(moved map here, out of Graph.cpp)\par
+"fltk.h"->fltk code\par
+It is not clear if this is entirely accurate and it also is not what is described in the  chapter graphic. Comparing the two reveals that this is a more direct and ordered stack from the bottom tier to top tier.\par
+Top tier being "std_lib_facilities","Point.h", and "fltk.h"\par
+the middle tier ("Graph.h", and "Windows.h) are the only headers that call the top tier but do not call each other)and the bottom tier must go through "Graph.h" or "Windows.h" . Also the standard library headers can all be called from one source(std_lib_facilities) which helps to orginize things.\par
+18.) Lets start with Simple_window.h: Select it from the PPP2 folder and open in a text editor. Note: I used #pragma once on the first line at the top of each file. This may not work with every compiler and may not be needed. If you need to know more you can google it. And decide if you want to include it. I believe VS will use it on some files by default.I have also refrained from deleting anything at this time just comment out the un-needed item's for now. Later on you may want refer back to these changes during debugging.\par
+#pragma once (Line 1)\par
+#include "Graph.h" (need's to be inluded).\par
+change "GUI.h" to "Gui.h"(This the way the header file is listed in PPP2)\par
+edit the line: struct Simple_window: Window \{ ....\}\par
+struct Simple_window: Graph_lib::Window\{....\}\par
+select File/save changes.  \par
+Since Simple_window.h includes Gui.h and Graph .h we will do them next.\par
+select Graph.h open in the editor.\par
+#pragma once(line 1)\par
+#include "Point.h"\par
+#include "fltk.h"\par
+#include"std_lib_facilities.h"\par
+comment out all other header files present (example. //#include <vector>)\par
+around line 105,2 change: int i=0 to: size_t i=0, (removes a sign/unsigned mismatch warning).\par
+\cf3\f1\fs19 ~Vector_ref() \{ \cf1 for\cf3  (\cf5 size_t\cf3  i=0; i<owned.size(); ++i) \cf1 delete\cf3  owned[i]; \}\cf0\f0\fs22\par
+select save and close.\par
+select Gui.h from the PPP2 file, In the text editor window make the following change's.\par
+#pragma once(line 1)\par
+comment out all other header's except "Window.h" and "Graph.h"\par
+around line 92(line numbers may vary from editor to editor) change the following  line  comment out s and write in label. I am cautious about deleting anything in case i need to change it back. Add to the constructor the initilizer list.\par
+\cf3\f1\fs19 Menu(\cf5 Point\cf3  \cf2 xy\cf3 , \cf1 int\cf3  \cf2 w\cf3 , \cf1 int\cf3  \cf2 h\cf3 , \cf5 Kind\cf3  \cf2 kk\cf3 , \cf1 const\cf3  \cf5 string\cf3 & \cf8 s\cf3 );\f2\lang1033  <-(remove that simi colon syntex error) and change too.\par
+\f1 Menu(\cf5 Point\cf3  \cf2 xy\cf3 , \cf1 int\cf3  \cf2 w\cf3 , \cf1 int\cf3  \cf2 h\cf3 , \cf5 Kind\cf3  \cf2 kk\cf3 , \cf1 const\cf3  \cf5 string\cf3 & \cf8 /*s*/\cf3  \cf2 label\cf3 )\par
+\f2\tab\f1 :\cf5 Widget\cf3 (\cf2 xy\cf3 , \cf2 w\cf3 , \cf2 h\cf3 , \cf2 label\cf3 , 0), k(\cf2 kk\cf3 ), offset(0)\{\}\f2\lang9\par
+\lang1033 around line 112:\par
+ \cf1\f1 void\cf3  attach(\cf5 Window\cf3 & \cf2 win\cf3 )\par
+\tab\{\par
+\tab\tab\cf1 for\cf3  (\cf1 int\cf3  i=0; i<selection.size(); ++i) \cf2 win\cf3 .attach(selection\cf9 [\cf3 i\cf9 ]\cf3 );\par
+\tab\tab own = &\cf2 win\cf3 ;\f2 (missing)\f1\par
+\tab\}\tab\f2 (add own=&win;)\cf0\f0\fs22\lang9\par
+save and close.\par
+select Point.h from PPP2 and open in the text editor window change the following\par
+uncomment everything  (all the lines of code that have been commented out).\par
+add #pragma once on first line before anything else.\par
+save and close.\par
+select "Windows.h"\par
+#pragma once (Top line before anything else)\par
+#include "fltk.h"\par
+#include "std_lib_facilities.h"\par
+#include "Point.h"\par
+comment out all other includes.\par
+save and close.\par
+select Graph.cpp from source in the Properties Exporer and make the following changes in the text editor.\par
+#include "Graph.h"\par
+comment out all other includes.\par
+change the line (around 312 -> 315 will vary but it is the bool can_open(....) function)\par
+from: return ff;\par
+change to: return bool(ff);\par
+save and close.\par
+select Gui.cpp from PPP2 and in the text editor change:\par
+comment out all include's except "Gui.h"\par
+comment out:\par
+Menu::Menu(....)\{\}  around line 55. This function has already been defined .\par
+it has already been constructed and defined in anoter location.\par
+save and close.\par
+select "std_lib_facilities.h " and in the editor change:\par
+#pragma once (on line 1)\par
+below pragma but before any thing else add:\par
+\cf2\f1\fs19 #ifndef\cf3  STD_LIB_FACILITIES_H_INCLUDED\par
+\cf2 #define\cf3  \cf7 STD_LIB_FACILITIES_H_INCLUDED\par
+\f2\lang1033 #include<map> (add to the list of includes)\f1\lang9\par
+\f2\lang1033 add on the last line:\par
+\cf2\f1 #endif\cf3  \cf8 // STD_LIB_FACILITIES_H_INCLUDED\cf0\f0\fs22\lang9\par
+\par
+Around line 222 -> 237(line numbers may vary so it's near there) comment out the default_random_engine& get_rand(...)\{\}\par
+and the helper functions int randint(),seed randint(..),int randint(max).\par
+This function is apparently creates conflicts in some other header  and source file's.\par
+select save and close.\par
+select window.cpp and open in a text editor.\par
+around line 59,21 cahange: int i=0 to: size_t i=0; (removes signed/unsigned mismatch warning).\par
+\cf1\f1\fs19 for\cf3  (\cf5 size_t\cf3  i=0; i<shapes.size(); ++i)\cf0\f0\fs22\par
+select save and close.\par
+Open Visual Studio code 2019 community edition.\par
+ Open Visual Studio Code and if you have not done so at this time select  create a new poject. From the menu select emty project and name it win32. I have checked the box to save the solution to the same project folder this is optional.  \par
+19.)In the Solution explorer(if not already open you can open it by selecting from the ribbon menu View/Solution explorer) of your project select Headers from the drop down menu and right clic and select add existing item. copy the header files from ppp2 into Header files folder. You will need fltk.h, Graph.h,Gui.h, Point.h, Simple_window.h,  Window.h, and std_lib_facilities.h. A note on std_lib_facilities.h in the chapter introduction it  say's that you can use this header file or start dealing directly with the std libraries. I am using the std_lib..header here it has all the needed std facilities that more than one header file depends on. If you choose not to use it at least use it here until things are up and running.\par
+use the same procedure to copy the cpp files to the source folder. You will need Graph.cpp, Gui.cpp, and Window.cpp. We intend to build and link these file's all in one go but the compiler and the linker will still need to find them. So we will copy them one by one to the projects folder.\par
+After making the corrections to these files and adding tmem to the header and source file's in the project, select them one at a time and from the ribbon menu select File/save as: navigate to were VS has saved your project, the defualt location should be a folder called source/repos/the name of your project. Open the project folder and save the corrected header and source files. This  will allow the linker to find them.\par
+now go back to step 15 and check the  c/c++ settings.\par
+Go back to step 13 and 14 and check that the linker settings are correct. \par
+once done continue with step 18.\par
+18) Add the main() entry point cpp:\par
+From the Solution Explorer window select source files and right clic. and select add new item. From the pop up menu select visual c++ /C++file(. cpp).Name the file, I named mine simple_window or leave it as source.cpp if you prefer then select add. In the new blank editor box create the cpp file from PPP(2 edition) chapter on "A Display Model. Here is the first part of that file you can use it or use the book. if you use this copy you should still read the chapter. This is not the complete chapter source code.  But it should create an executable.\par
+\cf2\f1\fs19 #include\cf3  \cf4 "Simple_window.h"\cf3\par
+\cf2 #include\cf3  \cf4 "Graph.h"\cf3\par
+\par
+\cf1 using\cf3  \cf1 namespace\cf3  Graph_lib;\par
+\par
+\cf1 int\cf3  main()\par
+\par
+\tab\cf1 try\cf3\par
+\tab\{\par
+\par
+\tab\tab\cf5 Point\cf3  tl\{ 100,100 \};\par
+\tab\tab\cf5 Simple_window\cf3  win\{ tl,600,400,\cf4 "Canvas"\cf3  \};\par
+\tab\tab Graph_lib::\cf5 Polygon\cf3  poly;\par
+\tab\tab poly.add(\cf5 Point\cf3\{ 300,200 \});\par
+\tab\tab poly.add(\cf5 Point\cf3\{ 350,100 \});\par
+\tab\tab poly.add(\cf5 Point\cf3\{ 400,200 \});\par
+\tab\tab poly.set_color(\cf5 Color\cf3 ::\cf6 red\cf3 );\par
+\tab\tab poly.set_style(\cf5 Line_style\cf3 (\cf5 Line_style\cf3 ::\cf6 dash\cf3 , 4));\par
+\tab\tab win.attach(poly);\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Axis\cf3  xa\{ \cf5 Axis\cf3 ::\cf6 x\cf3 ,\cf5 Point\cf3\{20,300\},280,10,\cf4 "x axis"\cf3  \};\par
+\tab\tab\cf8 //make an axis, axis is a kind of shape\cf3\par
+\tab\tab\cf8 // x axis, means horizontal starting at (20,300), 280 pixals long\cf3\par
+\tab\tab\cf8 //10 "notches, label it x axis\cf3\par
+\tab\tab win.attach(xa);\par
+\tab\tab win.set_label(\cf4 "Canvas #2"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Axis\cf3  ya\{ \cf5 Axis\cf3 ::\cf6 y\cf3 ,\cf5 Point\cf3\{20,300\},280,10,\cf4 "y axis"\cf3  \};\par
+\tab\tab ya.set_color(\cf5 Color\cf3 ::\cf6 cyan\cf3 );\par
+\tab\tab\cf8 // choose a color\cf3\par
+\tab\tab ya.label.set_color(\cf5 Color\cf3 ::\cf6 dark_red\cf3 );\par
+\tab\tab\cf8 // choose a color for the text\cf3\par
+\tab\tab win.attach(ya);\par
+\tab\tab win.set_label(\cf4 "Canvas #3"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Function\cf3  sine\{ sin,0,100,\cf5 Point\cf3\{20,150\},1000,50,50 \};\par
+\tab\tab\cf8 //sine curve plot sin() in range [0:100] with (0,0)at (20,150)\cf3\par
+\tab\tab\cf8 //using 1000 points; scale x values *50,scale y values *50\cf3\par
+\tab\tab win.attach(sine);\par
+\tab\tab win.set_label(\cf4 "Canvas #4"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab Graph_lib::\cf5 Rectangle\cf3  r\{ \cf5 Point\cf3\{200,200\},100,50 \};\par
+\tab\tab\cf8 //top left corner,width,height\cf3\par
+\tab\tab r.set_fill_color(\cf5 Color\cf3 ::\cf6 yellow\cf3 );\par
+\tab\tab win.attach(r);\par
+\tab\tab win.set_label(\cf4 "Canvas #6"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Closed_polyline\cf3  poly_rect;\par
+\tab\tab poly_rect.add(\cf5 Point\cf3\{ 100,50 \});\par
+\tab\tab poly_rect.add(\cf5 Point\cf3\{ 200,50 \});\par
+\tab\tab poly_rect.add(\cf5 Point\cf3\{ 200,100 \});\par
+\tab\tab poly_rect.add(\cf5 Point\cf3\{ 100,100 \});\par
+\tab\tab poly_rect.add(\cf5 Point\cf3\{ 50,75 \});\par
+\tab\tab poly_rect.set_fill_color(\cf5 Color\cf3 ::\cf6 green\cf3 );\par
+\tab\tab win.attach(poly_rect);\par
+\tab\tab win.set_label(\cf4 "Canvas #7"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Text\cf3  t\{ \cf5 Point\cf3\{150,150\},\cf4 "Hello Graphical World!"\cf3  \};\par
+\tab\tab win.attach(t);\par
+\tab\tab win.set_label(\cf4 "Canvas #8"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab t.set_font(\cf5 Font\cf3 ::\cf6 times_bold\cf3 );\par
+\tab\tab t.set_font_size(20);\par
+\tab\tab win.set_label(\cf4 "Canvas #9"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\tab\cf5 Image\cf3  ii\{ \cf5 Point\cf3\{100,50\},\cf4 "image.jpg"\cf3  \};\par
+\tab\tab\cf8 // 400*212-pixel jpg\cf3\par
+\tab\tab win.attach(ii);\par
+\tab\tab win.set_label(\cf4 "Canvas #10"\cf3 );\par
+\tab\tab win.wait_for_button();\par
+\par
+\tab\}\par
+\tab\cf1 catch\cf3  (\cf5 exception\cf3 & e) \{\par
+\tab\tab\cf8 // error reporting\cf3\par
+\tab\tab\cf1 return\cf3  1;\par
+\tab\}\par
+\tab\cf1 catch\cf3  (...) \{\par
+\tab\tab\cf8 //more error reporting\cf3\par
+\tab\tab\cf1 return\cf3  2;\par
+\tab\}\par
+\cf0\f0\fs22 create this file for an entry point as a cpp file. Select from the Solution Explorer win32(or the project name)on the ribbon menu/ build or press f5.\par
+select Tools/Command line and choose the shell that you prefer. \par
+>cd debug \par
+enter dir (if in cmd window) or ls if in (Power shell) there should be an .exe file. \par
+I hope this works for you if you have problems go back double check that you have completed all the steps in order.\par
+ good luck.\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+ \par
+}
+ 
